@@ -341,3 +341,38 @@ sudo vim ~/.zshrc
 更改合适的主题`bira`
 ```
 
+## 3：tim
+
+```bash
+sudo vim /etc/pacman.conf
+解封multilib镜像仓库，安装64位系统中需要的32位软件和库，例如：wine等
+sudo yaourt -Syu
+
+安装tim：
+sudo yaourt -Ss deepin.com.qq.office
+注意查看是否安装了`deepin-fonts-wine`
+```
+
+# 6：桌面环境
+
+## 1：Deepin桌面环境
+
+更改系统音效：替换以下路径下音效文件即可
+
+```bash
+/usr/share/sounds/deepin/stereo
+```
+
+附音效文件下载网址：`http://www.aigei.com/`
+
+# 7：安装字体
+
+```bash
+cd /usr/share/fonts
+sudo mkdir myFonts
+sudo mv microsoftyahei.ttf /usr/share/fonts/myFonts
+sudo chmod 644 microsoftyahei.ttf
+sudo mkfontscale   创建字体的fonts.scale文件,它用来控制字体旋转缩放
+sudo mkfontdir     创建字体的fonts.dir文件,它用来控制字体粗斜体产生
+fc-cache           扫描字体目录并生成字体信息的缓存
+```

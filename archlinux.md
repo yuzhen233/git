@@ -116,10 +116,20 @@ vim ~/.xprofile
 export LC_ALL="zh_CN.UTF-8"
 ```
 
+**将简体中文设置为默认语言**
+
+```bash
+vim /etc/locale.conf
+添加
+LANG=zh_CN.UTF-8
+```
+
+由于对[Locale (简体中文)](https://wiki.archlinux.org/index.php/Locale_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87))定义了框架内地区（即 CJK 优先度），使得默认的优先级被忽略。
+
 ### 3：安装中文字体
 
 ```bash
-pacman -S noto-fonts
+pacman -S noto-fonts-cjk
 ```
 
 ## 13：设置主机名
@@ -136,7 +146,7 @@ vim /etc/hosts
 ## 14：设置Root密码
 
 ```bash
-passwd`
+passwd
 ```
 
 ## 15：安装`Intel-ucode`
@@ -194,9 +204,12 @@ sudo pacman -S xf86-video-intel
 
 ```bash
 sudo pacman -S xorg
-sudo pacman -S gnome
-sudo pacman -S sddm
-sudo systemctl enable sddm
+sudo pacman -S deepin deepin-extra
+sudo pacman -S lightdm
+sudo vim /etc/lightdm/lightdm.conf
+找到该行去掉注释修改为以下代码
+greeter-session=lightdm-deepin-greeter
+sudo systemctl enable lightdm
 ```
 
 ## 22：提前配置网络
@@ -206,7 +219,36 @@ sudo systemctl disable netctl
 sudo systemctl enable NetworkManager
 ```
 
-# 2：**科学上网**
+# 2：添加中文社区镜像源
+
+```bash
+sudo vim /etc/pacman.conf
+添加以下代码
+[archlinuxcn]
+SigLevel = Optional TrustAll
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+
+sudo pacman -Sy
+sudo pacman -S archlinuxcn-keyring
+sudo pacman -Sy
+```
+
+# 3：安装搜狗输入法
+
+```bash
+sudo pacman -S fcitx
+sudo pacman -S fcitx-configtool
+sudo pacman -S fcitx-gtk2 fcitx-gtk3 fcitx-qt4 fcitx-qt5
+sudo pacman -S fcitx-sogoupinyin
+sudo vim ~/.xprofile
+添加以下代码
+export GTK_IM_MODULE=fcitx
+export QT_IM_MODULE=fcitx
+export XMODIFIERS="@im=fcitx"
+注销重启
+```
+
+# 4：科学上网
 
 ## 1：配置 SSR 客户端
 
@@ -214,7 +256,7 @@ sudo systemctl enable NetworkManager
 pacman -S shadowsocks-qt5
 ```
 
-​	附加免费`ssr`节点网址：`<https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7>`
+​	附加免费`ssr`节点网址：`https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7`
 
 ## 2：使用 proxychains-ng
 
@@ -242,3 +284,60 @@ proxychains4 firefox
 ## 3：使用 Proxy SwitchyOmega
 
 ​	chrome 无法访问外网时，可以在`getcrx.cn`或者`github`上下载该`crx`文件，下载后讲该`crx`格式文件右键解压到某文件夹下，然后`chrome`打开扩展页面，点击开发者模式，然后加载已解压的扩展程序，选择该文件夹，即可安装该插件。
+
+在原有的两个配置上进行更改：
+
+`proxy`：更改为：`长城防火墙`
+
+代理协议：socks5； 代理服务器：127.0.0.1； 代理端口：1080
+
+------
+
+`autoswitch`：更改为：`自动切换模式`
+
+条件类型：`域名通配符`； 条件设置：`raw.githubusercontent.com`； 情景模式：`长城防火墙`； 
+
+点击`添加条件`
+
+规则列表规则：`勾上`； 情景模式：`长城防火墙`； 默认情景模式：`直接连接`。
+
+规则列表格式：`AutoProxy`
+
+规则列表网址：`https://raw.githubusercontent.com/gfwlist/gfwlist/master/gfwlist.txt`
+
+点击更新情景模式。
+
+------
+
+配置完成，chrome右上角启用`自动转换`情景模式。
+
+# 5：常用软件
+
+## 1：BaiduPCS-Go
+
+```bash
+1：访问网址：http://pcs.baidu.com/rest/2.0/pcs/file?app_id=265486&method=list&path=%2F，生成/apps/baidu_shurufa目录。
+2：config set -appid=266719
+3：login -bduss=FUUUM3VU02RXlmTzRybkFXdjlkYVdaflFnSTVVNDJWSVZ-Nms1UFJaMWt2cnBjQVFBQUFBJCQAAAAAAAAAAAEAAADR4t~AS29yYW5DaGV1bmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQxk1xkMZNcVH
+4：cd /apps/baidu_shurufa
+5：config set -appid=265486
+```
+
+## 2：zsh
+
+```bash
+chsh -l           查看系统自带哪些shell
+echo $SHELL       查看当前环境shell
+
+1：安装zsh
+sudo pacman -S zsh
+2：设置zsh为默认shell
+chsh -s /usr/bin/zsh
+3：重启
+4：安装oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+5：配置oh-my-zsh
+sudo vim ~/.zshrc
+更改合适的主题`bira`
+```
+

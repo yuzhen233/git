@@ -219,7 +219,27 @@ sudo systemctl disable netctl
 sudo systemctl enable NetworkManager
 ```
 
-# 2：添加中文社区镜像源
+# 2：安装完成后工作
+
+## 1：zsh
+
+```bash
+chsh -l           查看系统自带哪些shell
+echo $SHELL       查看当前环境shell
+
+1：安装zsh
+sudo pacman -S zsh
+2：设置zsh为默认shell
+chsh -s /usr/bin/zsh
+3：重启
+4：安装oh-my-zsh
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+5：配置oh-my-zsh
+sudo vim ~/.zshrc
+更改合适的主题`bira`
+```
+
+## 2：添加中文社区镜像源
 
 ```bash
 sudo vim /etc/pacman.conf
@@ -233,7 +253,14 @@ sudo pacman -S archlinuxcn-keyring
 sudo pacman -Sy
 ```
 
-# 3：安装搜狗输入法
+## 3：安装yay
+
+```bash
+在添加完中文社区镜像源后：
+sudo pacman -S yay
+```
+
+## 4：安装搜狗输入法
 
 ```bash
 sudo pacman -S fcitx
@@ -245,12 +272,12 @@ sudo vim ~/.xprofile
 export GTK_IM_MODULE=fcitx
 export QT_IM_MODULE=fcitx
 export XMODIFIERS="@im=fcitx"
-注销重启
+注销重启，并打开`fcitx-configtool`设置快捷键
 ```
 
-# 4：科学上网
+## 4：科学上网
 
-## 1：配置 SSR 客户端
+### 1：配置 SSR 客户端
 
 ```bash
 pacman -S shadowsocks-qt5
@@ -258,7 +285,7 @@ pacman -S shadowsocks-qt5
 
 ​	附加免费`ssr`节点网址：`https://github.com/Alvin9999/new-pac/wiki/ss%E5%85%8D%E8%B4%B9%E8%B4%A6%E5%8F%B7`
 
-## 2：使用 proxychains-ng
+### 2：使用 proxychains-ng
 
 ​	1：下载：
 
@@ -281,9 +308,15 @@ proxychains4 curl www.google.com
 proxychains4 firefox
 ```
 
-## 3：使用 Proxy SwitchyOmega
+### 3：使用 Proxy SwitchyOmega
 
-​	chrome 无法访问外网时，可以在`getcrx.cn`或者`github`上下载该`crx`文件，下载后讲该`crx`格式文件右键解压到某文件夹下，然后`chrome`打开扩展页面，点击开发者模式，然后加载已解压的扩展程序，选择该文件夹，即可安装该插件。
+首先尝试使用命令行进行chrome代理：
+
+`````bash
+google-chrome-stable --proxy-server="socks5://127.0.0.1:1080"
+`````
+
+​	上述办法无效或无法访问外网时，可以在`getcrx.cn`或者`github`上下载该`crx`文件，下载后讲该`crx`格式文件右键解压到某文件夹下，然后`chrome`打开扩展页面，点击开发者模式，然后加载已解压的扩展程序，选择该文件夹，即可安装该插件。
 
 在原有的两个配置上进行更改：
 
@@ -311,9 +344,17 @@ proxychains4 firefox
 
 配置完成，chrome右上角启用`自动转换`情景模式。
 
-# 5：常用软件
+# 3：常用软件
 
-## 1：BaiduPCS-Go
+## 1：Synapse
+
+```bash
+sudo pacman -S synapse
+```
+
+安装后设置激活快捷键为：`ctrl + shift + space`
+
+## 2：BaiduPCS-Go
 
 ```bash
 1：访问网址：http://pcs.baidu.com/rest/2.0/pcs/file?app_id=265486&method=list&path=%2F，生成/apps/baidu_shurufa目录。
@@ -321,24 +362,6 @@ proxychains4 firefox
 3：login -bduss=FUUUM3VU02RXlmTzRybkFXdjlkYVdaflFnSTVVNDJWSVZ-Nms1UFJaMWt2cnBjQVFBQUFBJCQAAAAAAAAAAAEAAADR4t~AS29yYW5DaGV1bmcAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGQxk1xkMZNcVH
 4：cd /apps/baidu_shurufa
 5：config set -appid=265486
-```
-
-## 2：zsh
-
-```bash
-chsh -l           查看系统自带哪些shell
-echo $SHELL       查看当前环境shell
-
-1：安装zsh
-sudo pacman -S zsh
-2：设置zsh为默认shell
-chsh -s /usr/bin/zsh
-3：重启
-4：安装oh-my-zsh
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
-5：配置oh-my-zsh
-sudo vim ~/.zshrc
-更改合适的主题`bira`
 ```
 
 ## 3：tim
@@ -353,7 +376,9 @@ sudo yaourt -Ss deepin.com.qq.office
 注意查看是否安装了`deepin-fonts-wine`
 ```
 
-# 6：桌面环境
+## 4：screenfetch
+
+# 5：桌面环境
 
 ## 1：Deepin桌面环境
 
@@ -365,7 +390,7 @@ sudo yaourt -Ss deepin.com.qq.office
 
 附音效文件下载网址：`http://www.aigei.com/`
 
-# 7：安装字体
+# 6：安装字体
 
 ```bash
 cd /usr/share/fonts
